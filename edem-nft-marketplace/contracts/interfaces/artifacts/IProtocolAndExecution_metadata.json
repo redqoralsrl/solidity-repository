@@ -1,0 +1,323 @@
+{
+	"compiler": {
+		"version": "0.8.19+commit.7dd6d404"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "bool",
+								"name": "isDealer",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "takerAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MarketTypes.User",
+						"name": "userSeller",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bool",
+								"name": "isDealer",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "edemSigner",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "collection",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "nftAmount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "protocolAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "tradeTokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "nonce",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "endTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint8",
+								"name": "v",
+								"type": "uint8"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "r",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "s",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct MarketTypes.MarketPlace",
+						"name": "marketProposer",
+						"type": "tuple"
+					}
+				],
+				"name": "possibleAcceptSuggest",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "bool",
+								"name": "isDealer",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "takerAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MarketTypes.User",
+						"name": "userProposer",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bool",
+								"name": "isDealer",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "edemSigner",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "collection",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "nftAmount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "protocolAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "tradeTokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "nonce",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "endTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint8",
+								"name": "v",
+								"type": "uint8"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "r",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "s",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct MarketTypes.MarketPlace",
+						"name": "marketSeller",
+						"type": "tuple"
+					}
+				],
+				"name": "possiblePurchase",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "viewProtocolFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"hardhat/contracts/interfaces/IProtocolAndExecution.sol": "IProtocolAndExecution"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"hardhat/contracts/interfaces/IProtocolAndExecution.sol": {
+			"keccak256": "0x440a9935ec96d61035fcb351943e80cf974f9385ddb6dc3ecaecc8445cfa5689",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9152a5069e8900c8f770f47314061c01b80557ac00bc265c7fd8cdd28da5e4c9",
+				"dweb:/ipfs/QmNgS11CdmbZQT2WBs2DyHTBRoGcs2irt9xn8juya3nmq1"
+			]
+		},
+		"hardhat/contracts/libraries/MarketTypes.sol": {
+			"keccak256": "0x13212afd96004a6866cd1801072e693f8ece47386563f69938e377eaca4c063d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2ce500c28b379345cd24efc0099dda76ae92510c2996ec3f8f934df9d954ee9b",
+				"dweb:/ipfs/QmQyzpSJuytcnSiKoezaiZ5CXQv5nAfNqCcjP6Wtep5v7W"
+			]
+		}
+	},
+	"version": 1
+}

@@ -1,0 +1,65 @@
+{
+	"compiler": {
+		"version": "0.8.19+commit.7dd6d404"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "collection",
+						"type": "address"
+					}
+				],
+				"name": "transferManagerAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"hardhat/contracts/interfaces/ITransferManager.sol": "ITransferManager"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"hardhat/contracts/interfaces/ITransferManager.sol": {
+			"keccak256": "0x01e4744f585b0451b446609219f37d907e4e5d25a342ae1edeaf28b684bb59c6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4ecd900745a846c01ba7caab3a0d7ba5b2d206651b36ead76b6cd125b946d780",
+				"dweb:/ipfs/QmV6tqDV6MYQzFLcDoVwiFJaohJrM3SjruYaKAMGCa4Zdm"
+			]
+		}
+	},
+	"version": 1
+}

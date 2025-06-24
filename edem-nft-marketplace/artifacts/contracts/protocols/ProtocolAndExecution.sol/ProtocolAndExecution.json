@@ -1,0 +1,378 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ProtocolAndExecution",
+  "sourceName": "contracts/protocols/ProtocolAndExecution.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "protocolFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "NewProtocolFee",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "isDealer",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "takerAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct MarketTypes.User",
+          "name": "userSeller",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "isDealer",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "edemSigner",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "collection",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "nftAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "protocolAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "tradeTokenAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "startTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "endTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "isCombo",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "combos",
+              "type": "uint256[]"
+            },
+            {
+              "internalType": "uint8",
+              "name": "v",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "r",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "s",
+              "type": "bytes32"
+            }
+          ],
+          "internalType": "struct MarketTypes.MarketPlace",
+          "name": "marketProposer",
+          "type": "tuple"
+        }
+      ],
+      "name": "possibleAcceptSuggest",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "isDealer",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "takerAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct MarketTypes.User",
+          "name": "userProposer",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "isDealer",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "edemSigner",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "collection",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "nftAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "protocolAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "tradeTokenAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "startTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "endTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "isCombo",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "combos",
+              "type": "uint256[]"
+            },
+            {
+              "internalType": "uint8",
+              "name": "v",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "r",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "s",
+              "type": "bytes32"
+            }
+          ],
+          "internalType": "struct MarketTypes.MarketPlace",
+          "name": "marketSeller",
+          "type": "tuple"
+        }
+      ],
+      "name": "possiblePurchase",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newProtocolFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "setProtocolFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "viewProtocolFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x60806040526103e860015534801561001657600080fd5b5061002033610025565b610075565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b61050e806100846000396000f3fe608060405234801561001057600080fd5b506004361061007d5760003560e01c8063787dce3d1161005b578063787dce3d146100d45780638da5cb5b146100e75780639dd1cda61461010f578063f2fde38b1461012057600080fd5b80630b6b132a1461008257806314b14048146100b7578063715018a6146100ca575b600080fd5b610095610090366004610402565b610133565b6040805193151584526020840192909252908201526060015b60405180910390f35b6100956100c5366004610402565b61018d565b6100d26101f9565b005b6100d26100e2366004610460565b61020d565b60005460405173ffffffffffffffffffffffffffffffffffffffff90911681526020016100ae565b6001546040519081526020016100ae565b6100d261012e366004610479565b610250565b600080600084604001358460a00135148015610156575084606001358460600135145b801561016757504284610140013510155b801561017857504284610120013511155b92505050606083013560808301359250925092565b600080600084604001358460a001351480156101a7575060015b80156101b857504284610120013511155b80156101c957504284610140013510155b80156101e457506101e2610180850161016086016104b6565b155b92505050606082013560808301359250925092565b61020161030c565b61020b600061038d565b565b61021561030c565b60018190556040518181527f3e1c6f794380f768303ee10adb978482d0ee037b0517bdabf3118141632078a69060200160405180910390a150565b61025861030c565b73ffffffffffffffffffffffffffffffffffffffff8116610300576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f646472657373000000000000000000000000000000000000000000000000000060648201526084015b60405180910390fd5b6103098161038d565b50565b60005473ffffffffffffffffffffffffffffffffffffffff16331461020b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e657260448201526064016102f7565b6000805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60008082840360a081121561041657600080fd5b608081121561042457600080fd5b50829150608083013567ffffffffffffffff81111561044257600080fd5b8301610200818603121561045557600080fd5b809150509250929050565b60006020828403121561047257600080fd5b5035919050565b60006020828403121561048b57600080fd5b813573ffffffffffffffffffffffffffffffffffffffff811681146104af57600080fd5b9392505050565b6000602082840312156104c857600080fd5b813580151581146104af57600080fdfea2646970667358221220d7277b2ae4b55631d5ba7aae87919e4bb9806af6cda4d079bb8f16d606bcff4f64736f6c63430008110033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061007d5760003560e01c8063787dce3d1161005b578063787dce3d146100d45780638da5cb5b146100e75780639dd1cda61461010f578063f2fde38b1461012057600080fd5b80630b6b132a1461008257806314b14048146100b7578063715018a6146100ca575b600080fd5b610095610090366004610402565b610133565b6040805193151584526020840192909252908201526060015b60405180910390f35b6100956100c5366004610402565b61018d565b6100d26101f9565b005b6100d26100e2366004610460565b61020d565b60005460405173ffffffffffffffffffffffffffffffffffffffff90911681526020016100ae565b6001546040519081526020016100ae565b6100d261012e366004610479565b610250565b600080600084604001358460a00135148015610156575084606001358460600135145b801561016757504284610140013510155b801561017857504284610120013511155b92505050606083013560808301359250925092565b600080600084604001358460a001351480156101a7575060015b80156101b857504284610120013511155b80156101c957504284610140013510155b80156101e457506101e2610180850161016086016104b6565b155b92505050606082013560808301359250925092565b61020161030c565b61020b600061038d565b565b61021561030c565b60018190556040518181527f3e1c6f794380f768303ee10adb978482d0ee037b0517bdabf3118141632078a69060200160405180910390a150565b61025861030c565b73ffffffffffffffffffffffffffffffffffffffff8116610300576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f646472657373000000000000000000000000000000000000000000000000000060648201526084015b60405180910390fd5b6103098161038d565b50565b60005473ffffffffffffffffffffffffffffffffffffffff16331461020b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e657260448201526064016102f7565b6000805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60008082840360a081121561041657600080fd5b608081121561042457600080fd5b50829150608083013567ffffffffffffffff81111561044257600080fd5b8301610200818603121561045557600080fd5b809150509250929050565b60006020828403121561047257600080fd5b5035919050565b60006020828403121561048b57600080fd5b813573ffffffffffffffffffffffffffffffffffffffff811681146104af57600080fd5b9392505050565b6000602082840312156104c857600080fd5b813580151581146104af57600080fdfea2646970667358221220d7277b2ae4b55631d5ba7aae87919e4bb9806af6cda4d079bb8f16d606bcff4f64736f6c63430008110033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

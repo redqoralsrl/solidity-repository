@@ -1,0 +1,19 @@
+{
+  "description": "EDEM ERC-721 NFT 거래용으로 제작된 NFT입니다.",
+  "image": "https://bafybeiddhe6kcgiebftercdyedvn2mbvxnbyfxqkhhnmaugiypdm4xmamu.ipfs.nftstorage.link/721.jpg",
+  "name": "EDEM ERC-721",
+  "attributes": [
+    {
+      "trait_type": "NFT",
+      "value": "ERC721"
+    },
+    {
+      "trait_type": "MARKET",
+      "value": "EDEM"
+    },
+    {
+      "trait_type": "TYPE",
+      "value": "CARD"
+    }
+  ]
+}

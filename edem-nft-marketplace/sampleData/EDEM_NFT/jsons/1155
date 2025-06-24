@@ -1,0 +1,19 @@
+{
+  "description": "EDEM ERC-1155 NFT 거래용으로 제작된 NFT입니다.",
+  "image": "https://bafybeiddhe6kcgiebftercdyedvn2mbvxnbyfxqkhhnmaugiypdm4xmamu.ipfs.nftstorage.link/1155.jpg",
+  "name": "EDEM ERC-1155",
+  "attributes": [
+    {
+      "trait_type": "NFT",
+      "value": "ERC1155"
+    },
+    {
+      "trait_type": "MARKET",
+      "value": "EDEM"
+    },
+    {
+      "trait_type": "TYPE",
+      "value": "CARD"
+    }
+  ]
+}

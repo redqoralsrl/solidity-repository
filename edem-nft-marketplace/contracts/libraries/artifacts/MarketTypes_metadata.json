@@ -1,0 +1,47 @@
+{
+	"compiler": {
+		"version": "0.8.19+commit.7dd6d404"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"title": "MarketTypes",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"notice": "This library containes Market types for the Edem Market.",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"hardhat/contracts/libraries/MarketTypes.sol": "MarketTypes"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"hardhat/contracts/libraries/MarketTypes.sol": {
+			"keccak256": "0x13212afd96004a6866cd1801072e693f8ece47386563f69938e377eaca4c063d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2ce500c28b379345cd24efc0099dda76ae92510c2996ec3f8f934df9d954ee9b",
+				"dweb:/ipfs/QmQyzpSJuytcnSiKoezaiZ5CXQv5nAfNqCcjP6Wtep5v7W"
+			]
+		}
+	},
+	"version": 1
+}
