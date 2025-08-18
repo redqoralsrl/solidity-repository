@@ -1350,7 +1350,7 @@ describe("WannaGovernancePool", () => {
     await deployer.writeContract({
       address: wannaLockUp.address,
       abi: wannaLockUp.abi,
-      functionName: "lock",
+      functionName: "lockUp",
       args: [user3.account.address, lockAmt],
     });
 
@@ -1447,7 +1447,7 @@ describe("WannaGovernancePool", () => {
     await deployer.writeContract({
       address: wannaLockUp.address,
       abi: wannaLockUp.abi,
-      functionName: "lock",
+      functionName: "lockUp",
       args: [user3.account.address, lockAmt],
     });
 
@@ -1475,7 +1475,7 @@ describe("WannaGovernancePool", () => {
     await deployer.writeContract({
       address: wannaLockUp.address,
       abi: wannaLockUp.abi,
-      functionName: "setUnLockPercentage",
+      functionName: "increaseUnlockPercent",
       args: [100n],
     });
 
