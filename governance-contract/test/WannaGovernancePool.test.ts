@@ -1336,4 +1336,210 @@ describe("WannaGovernancePool", () => {
 
     assert.equal(delegateWeight, 0n);
   });
+
+  it("WannaGovernancePool - 락업물량 voting power에 잘 반영되는지", async () => {
+    await deployer.writeContract({
+      address: wanna.address,
+      abi: wanna.abi,
+      functionName: "transfer",
+      args: [wannaLockUp.address, parseEther("5000")],
+    });
+
+    const lockAmt = parseEther("400");
+
+    await deployer.writeContract({
+      address: wannaLockUp.address,
+      abi: wannaLockUp.abi,
+      functionName: "lock",
+      args: [user3.account.address, lockAmt],
+    });
+
+    let lockedNow = (await publicClient.readContract({
+      address: wannaLockUp.address,
+      abi: wannaLockUp.abi,
+      functionName: "getLockedAmountOfAddress",
+      args: [user3.account.address],
+    })) as bigint;
+    assert.equal(lockedNow, lockAmt);
+
+    const title = "lock power reflected";
+    const url = "https://....com/lock-power";
+
+    const txHash = await user5.writeContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "propose",
+      args: [title, url, []],
+    });
+    const tx = await publicClient.getTransactionReceipt({ hash: txHash });
+    const log = tx.logs.find(
+      (l) => l.address.toLowerCase() === gov.address.toLowerCase()
+    ) as any;
+    const decoded = decodeEventLog({
+      abi: [getAbiItem({ abi: gov.abi, name: "ProposalCreated" })],
+      data: log.data,
+      topics: log.topics,
+    }) as any;
+
+    const proposalId = decoded.args.proposalId;
+
+    await mine(publicClient, 1);
+
+    const expectedWeight = (await publicClient.readContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "proposalDelegateAmount",
+      args: [proposalId, user3.account.address],
+    })) as bigint;
+    assert.equal(expectedWeight, lockAmt);
+
+    const voteTxHash = await user3.writeContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "castVote",
+      args: [proposalId, 1],
+    });
+
+    const voteTx = await publicClient.getTransactionReceipt({
+      hash: voteTxHash,
+    });
+    const voteLog = voteTx.logs.find(
+      (l) => l.address.toLowerCase() === gov.address.toLowerCase()
+    ) as any;
+    const voteDecoded = decodeEventLog({
+      abi: [getAbiItem({ abi: gov.abi, name: "VoteCast" })],
+      data: voteLog.data,
+      topics: voteLog.topics,
+    }) as any;
+
+    assert.equal(voteDecoded.args.weight, lockAmt);
+
+    const proposalResult = (await publicClient.readContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "proposals",
+      args: [proposalId],
+    })) as any;
+    assert.equal(proposalResult.forVotes, lockAmt);
+    assert.equal(proposalResult.againstVotes, 0n);
+    assert.equal(proposalResult.abstainVotes, 0n);
+
+    const perVoterWeights = (await publicClient.readContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "proposalVotesWeight",
+      args: [proposalId, user3.account.address],
+    })) as bigint[];
+    assert.equal(perVoterWeights[0], 0n);
+    assert.equal(perVoterWeights[1], lockAmt);
+    assert.equal(perVoterWeights[2], 0n);
+  });
+
+  it("WannaGovernancePool - 락업물량 꺼내고 투표시 voting power에 잘반영되는지", async () => {
+    await deployer.writeContract({
+      address: wanna.address,
+      abi: wanna.abi,
+      functionName: "transfer",
+      args: [wannaLockUp.address, parseEther("5000")],
+    });
+
+    const lockAmt = parseEther("600");
+    await deployer.writeContract({
+      address: wannaLockUp.address,
+      abi: wannaLockUp.abi,
+      functionName: "lock",
+      args: [user3.account.address, lockAmt],
+    });
+
+    const title = "unlock then vote";
+    const url = "https://....com/unlock-then-vote";
+    const txHash = await user5.writeContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "propose",
+      args: [title, url, []],
+    });
+    const tx = await publicClient.getTransactionReceipt({ hash: txHash });
+    const log = tx.logs.find(
+      (l) => l.address.toLowerCase() === gov.address.toLowerCase()
+    ) as any;
+    const decoded = decodeEventLog({
+      abi: [getAbiItem({ abi: gov.abi, name: "ProposalCreated" })],
+      data: log.data,
+      topics: log.topics,
+    }) as any;
+    const proposalId = decoded.args.proposalId;
+
+    await mine(publicClient, 1);
+
+    await deployer.writeContract({
+      address: wannaLockUp.address,
+      abi: wannaLockUp.abi,
+      functionName: "setUnLockPercentage",
+      args: [100n],
+    });
+
+    await user3.writeContract({
+      address: wannaLockUp.address,
+      abi: wannaLockUp.abi,
+      functionName: "claimSelected",
+      args: [[0n]],
+    });
+
+    const lockedAfterClaim = (await publicClient.readContract({
+      address: wannaLockUp.address,
+      abi: wannaLockUp.abi,
+      functionName: "getLockedAmountOfAddress",
+      args: [user3.account.address],
+    })) as bigint;
+    assert.equal(lockedAfterClaim, 0n);
+
+    const weightPreview = (await publicClient.readContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "proposalDelegateAmount",
+      args: [proposalId, user3.account.address],
+    })) as bigint;
+    assert.equal(weightPreview, 0n);
+
+    const voteTxHash = await user3.writeContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "castVote",
+      args: [proposalId, 1],
+    });
+    const voteTx = await publicClient.getTransactionReceipt({
+      hash: voteTxHash,
+    });
+    const voteLog = voteTx.logs.find(
+      (l) => l.address.toLowerCase() === gov.address.toLowerCase()
+    ) as any;
+    const voteDecoded = decodeEventLog({
+      abi: [getAbiItem({ abi: gov.abi, name: "VoteCast" })],
+      data: voteLog.data,
+      topics: voteLog.topics,
+    }) as any;
+
+    assert.equal(voteDecoded.args.weight, 0n);
+
+    const proposalResult = (await publicClient.readContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "proposals",
+      args: [proposalId],
+    })) as any;
+    assert.equal(proposalResult.forVotes, 0n);
+    assert.equal(proposalResult.againstVotes, 0n);
+    assert.equal(proposalResult.abstainVotes, 0n);
+
+    const perVoterWeights = (await publicClient.readContract({
+      address: gov.address,
+      abi: gov.abi,
+      functionName: "proposalVotesWeight",
+      args: [proposalId, user3.account.address],
+    })) as bigint[];
+    assert.equal(perVoterWeights[0], 0n);
+    assert.equal(perVoterWeights[1], 0n);
+    assert.equal(perVoterWeights[2], 0n);
+  });
 });

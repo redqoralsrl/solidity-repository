@@ -13,9 +13,9 @@ contract WannaLockUp is Ownable, ReentrancyGuard {
 
     struct LockInfo {
         uint256 startTime;
-        uint256 endTime;
         uint256 amount;
-        bool isUnlock;
+        uint256 percentage;
+        uint256 withdrawAmount;
     }
 
     mapping(address => LockInfo[]) public addressOfLocks;
@@ -23,74 +23,54 @@ contract WannaLockUp is Ownable, ReentrancyGuard {
     uint256 public initialLockedSupply;
     uint256 public totalClaimed;
 
+    uint256 public unLockPercentage = 0;
+    uint256 public immutable totalPercentage = 100;
+    uint256[] public unLockList;
+
     IERC20 public immutable tokenManager;
 
-    event Lock(
-        address indexed recipient,
-        uint256 amount,
-        uint256 lockTime,
-        uint256 startTime,
-        uint256 endTime
+    event LockPercentage(
+        uint256 unlockPercentage,
+        uint256 totalUnLockPercentage
     );
+    event Lock(address indexed recipient, uint256 startTime, uint256 amount);
     event Claim(
         address indexed recipient,
         uint256 amount,
+        uint256 percentage,
         uint256[] lockIndexs
     );
 
+    error UnLockSettingError();
     error ZeroAddress();
     error ZeroAmount();
     error ZeroLockTime();
     error NoUnlockedTokens();
     error InvalidIndex();
     error NotEnough();
+    error SystemError();
 
     constructor(address _token) {
         if (_token == address(0)) revert ZeroAddress();
         tokenManager = IERC20(_token);
     }
 
+    function increaseUnlockPercent(uint256 _unlock) public onlyOwner {
+        if (unLockPercentage + _unlock > totalPercentage)
+            revert UnLockSettingError();
+
+        unLockPercentage += _unlock;
+        unLockList.push(_unlock);
+
+        emit LockPercentage(_unlock, unLockPercentage);
+    }
+
+    function getUnLockList() external view returns (uint256[] memory) {
+        return unLockList;
+    }
+
     function getTokenBalance() external view returns (uint256) {
         return tokenManager.balanceOf(address(this));
-    }
-
-    function withdrawAll() external onlyOwner {
-        if (owner() == address(0)) revert ZeroAddress();
-
-        uint256 tokenAmount = tokenManager.balanceOf(address(this));
-        if (tokenAmount == 0) revert NotEnough();
-
-        tokenManager.safeTransfer(owner(), tokenAmount);
-    }
-
-    function lockUp(
-        address _recipient,
-        uint256 _amount,
-        uint256 _lockTime
-    ) external onlyOwner {
-        if (_recipient == address(0)) revert ZeroAddress();
-        if (_amount == 0) revert ZeroAmount();
-        if (_lockTime == 0) revert ZeroLockTime();
-
-        tokenManager.safeTransferFrom(msg.sender, address(this), _amount);
-
-        initialLockedSupply += _amount;
-        addressOfLocks[_recipient].push(
-            LockInfo(
-                block.timestamp,
-                block.timestamp + _lockTime,
-                _amount,
-                false
-            )
-        );
-
-        emit Lock(
-            _recipient,
-            _amount,
-            _lockTime,
-            block.timestamp,
-            block.timestamp + _lockTime
-        );
     }
 
     function getLockCount(address _recipient) external view returns (uint256) {
@@ -105,6 +85,31 @@ contract WannaLockUp is Ownable, ReentrancyGuard {
         return addressOfLocks[_recipient][_index];
     }
 
+    function getLockInfoAll(
+        address _recipient
+    ) public view returns (LockInfo[] memory) {
+        return addressOfLocks[_recipient];
+    }
+
+    function getLockClaimStatus(address _recipient) public view returns (bool) {
+        LockInfo[] storage locks = addressOfLocks[_recipient];
+        uint256 len = locks.length;
+
+        for (uint256 i; i < len; ) {
+            LockInfo storage l = locks[i];
+            if (
+                (l.amount * unLockPercentage) / totalPercentage >
+                l.withdrawAmount
+            ) {
+                return true;
+            }
+            unchecked {
+                ++i;
+            }
+        }
+        return false;
+    }
+
     function getLockedAmountOfAddress(
         address _recipient
     ) external view returns (uint256) {
@@ -116,9 +121,8 @@ contract WannaLockUp is Ownable, ReentrancyGuard {
         for (uint256 i = 0; i < len; ) {
             LockInfo storage lock = locks[i];
 
-            if (!lock.isUnlock) {
-                total += lock.amount;
-            }
+            total += lock.amount - lock.withdrawAmount;
+
             unchecked {
                 i++;
             }
@@ -129,86 +133,120 @@ contract WannaLockUp is Ownable, ReentrancyGuard {
 
     function getClaimableAmount(
         address _recipient
-    ) external view returns (uint256) {
+    ) external view returns (uint256 total) {
         LockInfo[] storage locks = addressOfLocks[_recipient];
         uint256 len = locks.length;
-        uint256 ts = block.timestamp;
 
-        uint256 claimable = 0;
+        for (uint256 i; i < len; ) {
+            LockInfo storage l = locks[i];
 
-        for (uint256 i = 0; i < len; ) {
-            LockInfo storage lock = locks[i];
-
-            if (!lock.isUnlock && ts >= lock.endTime) {
-                claimable += lock.amount;
+            uint256 entitled = (l.amount * unLockPercentage) / totalPercentage;
+            if (entitled > l.withdrawAmount) {
+                total += (entitled - l.withdrawAmount);
             }
+
             unchecked {
-                i++;
+                ++i;
             }
         }
+    }
 
-        return claimable;
+    function withdrawAll() external onlyOwner {
+        if (owner() == address(0)) revert ZeroAddress();
+
+        uint256 tokenAmount = tokenManager.balanceOf(address(this));
+        if (tokenAmount == 0) revert NotEnough();
+
+        tokenManager.safeTransfer(owner(), tokenAmount);
+    }
+
+    function withdraw(uint256 _amount) external onlyOwner {
+        if (owner() == address(0)) revert ZeroAddress();
+
+        uint256 tokenAmount = tokenManager.balanceOf(address(this));
+        if (tokenAmount == 0 || tokenAmount < _amount) revert NotEnough();
+
+        tokenManager.safeTransfer(owner(), _amount);
+    }
+
+    function lockUp(
+        address _recipient,
+        uint256 _amount
+    ) external nonReentrant onlyOwner {
+        if (_recipient == address(0)) revert ZeroAddress();
+        if (_amount == 0) revert ZeroAmount();
+
+        initialLockedSupply += _amount;
+        addressOfLocks[_recipient].push(
+            LockInfo(block.timestamp, _amount, 0, 0)
+        );
+
+        emit Lock(_recipient, block.timestamp, _amount);
     }
 
     function claimSelected(uint256[] calldata indexes) external nonReentrant {
-        LockInfo[] storage locks = addressOfLocks[msg.sender];
-        uint256 len = locks.length;
-        uint256 ts = block.timestamp;
-
-        uint256 total;
-        for (uint256 i; i < indexes.length; ) {
-            uint256 j = indexes[i];
-            if (j >= len) revert InvalidIndex();
-            LockInfo storage l = locks[j];
-            if (!l.isUnlock && ts >= l.endTime) {
-                total += l.amount;
-                l.isUnlock = true;
-            }
-            unchecked {
-                i++;
-            }
-        }
-        if (total == 0) revert NoUnlockedTokens();
-
+        (uint256 total, uint256[] memory claimedIndexes) = _claim(
+            msg.sender,
+            indexes
+        );
         totalClaimed += total;
+
         tokenManager.safeTransfer(msg.sender, total);
-        emit Claim(msg.sender, total, indexes);
+
+        emit Claim(msg.sender, total, unLockPercentage, claimedIndexes);
     }
 
     function claimAll() external nonReentrant {
-        LockInfo[] storage locks = addressOfLocks[msg.sender];
-        uint256 len = locks.length;
-        uint256 ts = block.timestamp;
-
-        uint256 n;
-        for (uint256 i; i < len; ) {
-            LockInfo storage l = locks[i];
-            if (!l.isUnlock && ts >= l.endTime) {
-                n++;
-            }
-            unchecked {
-                i++;
-            }
-        }
-        if (n == 0) revert NoUnlockedTokens();
-
-        uint256[] memory idx = new uint256[](n);
-        uint256 total;
-        uint256 k;
-        for (uint256 i; i < len; ) {
-            LockInfo storage l = locks[i];
-            if (!l.isUnlock && ts >= l.endTime) {
-                total += l.amount;
-                l.isUnlock = true;
-                idx[k++] = i;
-            }
-            unchecked {
-                i++;
-            }
-        }
-
+        uint256[] memory empty;
+        (uint256 total, uint256[] memory claimedIndexes) = _claim(
+            msg.sender,
+            empty
+        );
         totalClaimed += total;
+
         tokenManager.safeTransfer(msg.sender, total);
-        emit Claim(msg.sender, total, idx);
+
+        emit Claim(msg.sender, total, unLockPercentage, claimedIndexes);
+    }
+
+    function _claim(
+        address _user,
+        uint256[] memory indexes
+    ) internal returns (uint256 total, uint256[] memory claimedIndexes) {
+        LockInfo[] storage locks = addressOfLocks[_user];
+        uint256 len = locks.length;
+
+        bool isAll = (indexes.length == 0);
+        uint256 count = isAll ? len : indexes.length;
+
+        claimedIndexes = new uint256[](count);
+        uint256 idxCounter;
+
+        for (uint256 i; i < count; ) {
+            uint256 j = isAll ? i : indexes[i];
+            if (j >= len) revert InvalidIndex();
+
+            LockInfo storage l = locks[j];
+
+            uint256 entitled = (l.amount * unLockPercentage) / totalPercentage;
+            if (entitled > l.withdrawAmount) {
+                uint256 unlockable = entitled - l.withdrawAmount;
+
+                total += unlockable;
+                l.withdrawAmount = entitled;
+                l.percentage = unLockPercentage;
+                claimedIndexes[idxCounter++] = j;
+            }
+
+            unchecked {
+                ++i;
+            }
+        }
+
+        if (total == 0) revert NoUnlockedTokens();
+
+        assembly {
+            mstore(claimedIndexes, idxCounter)
+        }
     }
 }
