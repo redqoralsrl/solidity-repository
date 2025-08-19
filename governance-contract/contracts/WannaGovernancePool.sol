@@ -45,6 +45,8 @@ abstract contract WannaGovernor {
         bool hasVoted;
     }
 
+    event RegistPrivateAddress(address privateWallet, bool status);
+
     event ProposalCreated(
         uint256 proposalId,
         address proposer,
@@ -79,7 +81,7 @@ contract WannaGovernancePool is Ownable, WannaGovernor, ReentrancyGuard {
     mapping(uint256 => mapping(address => ProposalVote)) private _proposalVotes;
 
     uint256 _proposalThreshold = 0 * 10 ** 18; // 0 token
-    uint256 _votingPeriod = 28_800; // 7 day
+    uint256 _votingPeriod = 28_800; // 1 day
     uint256 _quorumVotes = 1000 * 10 ** 18; // 1000 token
 
     error NotEnough();
@@ -113,6 +115,7 @@ contract WannaGovernancePool is Ownable, WannaGovernor, ReentrancyGuard {
         bool _status
     ) external onlyOwner {
         privateUser[_privateUser] = _status;
+        emit RegistPrivateAddress(_privateUser, _status);
     }
 
     function setPublicMerkleRoot(bytes32 _merkleRoot) public onlyOwner {
